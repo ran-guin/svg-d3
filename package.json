@@ -10,12 +10,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/ran-guin/svg-d3.git"
+    "url": "https://github.com/ran-guin/svg-d3.git"
   },
   "bugs": {
-    "url": "https://gitlab.com/ran-guin/svg-d3/issues"
+    "url": "https://github.com/ran-guin/svg-d3/issues"
   },
-  "homepage": "https://gitlab.com/ran-guin/svg-d3#readme",
+  "homepage": "https://github.com/ran-guin/svg-d3#readme",
   "main": "./dist/index.js",
   "scripts": {
     "build": "make buildplus",
