@@ -2,13 +2,13 @@
 
 ## Getting started
 
-- `clone https://github.com/ran-guin/npm-package-template`
+- `git clone https://github.com/ran-guin/npm-package-template`
 
 - `cd npm-package-template`
 
 - `npm install` (to install mocha / chai for testing purposes)
 
-- `npm run build`
+- `npm run build` (test to make sure it is working out of the box)
 
 ## Included
 
@@ -19,11 +19,11 @@
 
 ## Directions
 
-### Setup (to adapt this repository for your own use)
+### Setup (to adapt this template for your own use)
 - reset url for your own repository
   - `git remote set_url origin 'https:github.com/<you>/<pkgName>`
 
-- update custom attributes of package.json file
+- update package.json file (*everything above "main" specification*)
 - add your own name to the LICENSE.md file
 
 - (optionally save your own custom version of this template under your own repository)
