@@ -12,8 +12,8 @@
 
 ## Included
 
-- default example.js src file
-- default exampe.js test file
+- default index.js src file - (overwrite with your own code)
+- default index.js test file - (overwrite with your own code)
 - Makefile to execute build to 'dist' directory
 - default LICENSE file (ISC) .... change as required...
 
