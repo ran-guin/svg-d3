@@ -1,5 +1,5 @@
 {
-  "name": "test",
+  "name": "svg-d3",
   "version": "1.0.0",
   "description": "",
   "author": "Ran Guin <ran.guin@gmail.com>",
@@ -10,13 +10,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/ran-guin/npm-package-template.git"
+    "url": "https://gitlab.com/ran-guin/svg-d3.git"
   },
   "bugs": {
-    "url": "https://gitlab.com/ran-guin/npm-package-template/issues"
+    "url": "https://gitlab.com/ran-guin/svg-d3/issues"
   },
-  "homepage": "https://gitlab.com/ran-guin/npm-package-template#readme",
-
+  "homepage": "https://gitlab.com/ran-guin/svg-d3#readme",
   "main": "./dist/index.js",
   "scripts": {
     "build": "make buildplus",
@@ -31,5 +30,6 @@
     "mocha": "^8.3.0"
   },
   "dependencies": {
+    "d3": "^6.5.0"
   }
 }
