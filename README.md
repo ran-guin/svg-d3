@@ -2,13 +2,13 @@
 
 ## Getting started
 
-- clone https://gitlab.com/ran-guin/npm-package-template
+- `clone https://github.com/ran-guin/npm-package-template`
 
-- cd npm-package-template
+- `cd npm-package-template`
 
-- npm install (to install mocha / chai for testing purposes)
+- `npm install` (to install mocha / chai for testing purposes)
 
-- npm run build
+- `npm run build`
 
 ## Included
 
@@ -19,11 +19,21 @@
 
 ## Directions
 
-### Setup
-- add your.js file(s) to src/ directory
-- add your.js file(s) to test/ directory (optional but recommended)
-- npm install 3rd party packages as required
-- run 'npm run build'
+### Setup (to adapt this repository for your own use)
+- reset url for your own repository
+  - `git remote set_url origin 'https:github.com/<you>/<pkgName>`
+
+- update custom attributes of package.json file
+- add your own name to the LICENSE.md file
+
+- (optionally save your own custom version of this template under your own repository)
+
+- add index.js file(s) to src/ directory
+- add index.js file(s) to test/ directory (optional but recommended)
+- `npm install -S ...` (install 3rd party packages as required)
+- `npm run build`
 - recursively add tests & edit as required to ensure working...
 
 ### Add to npm 
+
+
