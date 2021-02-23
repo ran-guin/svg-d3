@@ -1,19 +1,40 @@
 {
+  // Customize for your own project
   "name": "test",
   "version": "1.0.0",
   "description": "",
+  "author": "Ran Guin <ran.guin@gmail.com>",
+
+  
+  "keywords": [
+    "npm",
+    "package",
+    "template"
+  ],
+
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/ran-guin/npm-package-template.git"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/ran-guin/npm-package-template/issues"
+  },
+  "homepage": "https://gitlab.com/ran-guin/npm-package-template#readme",
+
+  // Standards
   "main": "./dist/index.js",
   "scripts": {
     "build": "make buildplus",
     "prepublish": "npm run build",
     "test": "make test"
   },
-  "author": "",
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "chai": "^4.3.0",
     "mocha": "^8.3.0"
+  },
+  "dependencies": {
   }
 }
