@@ -1,17 +1,13 @@
 {
-  // Customize for your own project
   "name": "test",
   "version": "1.0.0",
   "description": "",
   "author": "Ran Guin <ran.guin@gmail.com>",
-
-  
   "keywords": [
     "npm",
     "package",
     "template"
   ],
-
   "repository": {
     "type": "git",
     "url": "https://gitlab.com/ran-guin/npm-package-template.git"
@@ -21,7 +17,6 @@
   },
   "homepage": "https://gitlab.com/ran-guin/npm-package-template#readme",
 
-  // Standards
   "main": "./dist/index.js",
   "scripts": {
     "build": "make buildplus",
