@@ -340,4 +340,4 @@ function addRectangle(options) {
           .attr('fill', set.color || 'green');
 }
 
-module.exports = {colour, showDefaults, initSvg, embedData, resize, setOptions, addCircle, addRectangle}
+export default {colour, showDefaults, initSvg, embedData, resize, setOptions, addCircle, addRectangle}

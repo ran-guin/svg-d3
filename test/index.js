@@ -1,7 +1,6 @@
-var chai = require('chai');  
-var expect = chai.expect;
+import { expect } from 'chai';  
 
-const svg = require('../dist/');
+import svg from '../dist/index.js';
 
 describe('SVG Test', () => {
   

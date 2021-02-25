@@ -5,7 +5,7 @@ runBuild:
 	@echo "*** Generate dist build ***"
 	@echo "***************************\n"
 
-	./node_modules/.bin/babel src --presets babel-preset-es2015 --out-dir dist
+	./node_modules/.bin/babel src --out-dir dist
 
 runTest:
 	@echo "\n*****************"
