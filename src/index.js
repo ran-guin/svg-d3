@@ -106,6 +106,7 @@ function embedData (data, element) {
   var table = document.createElement("table");
   var record = data[0]
 
+  console.log(record.constructor + ' record type detected for ' + JSON.stringify(data))
   if (record.constructor === Object) {
     console.log('converting hashes to table')
     var keys = Object.keys(data)
@@ -142,6 +143,8 @@ function embedData (data, element) {
             cell.innerHTML = cells[j];
         }
     }
+  } else {
+    console.debug("unexpected record type: " + record.constructor)
   }
   var embedElement = document.getElementById(element);
   if (embedElement) {
@@ -306,10 +309,7 @@ function setOptions (type, options) {
     Options.scaleY = Options.dataHeight / Options.maxY
 
   }
-
-
-
-  console.log(type + ' output OPTIONS: ' + JSON.stringify(Options))
+  console.log(type + ' output options: ' + JSON.stringify(Options))
   return Options
 }
 
@@ -319,6 +319,7 @@ function addCircle (options) {
 
   const set = this.setOptions('circle', options)
 
+  console.log('append circle to svg element...')
   return svg.append('circle')
           .attr('cx', set.x)
           .attr('cy', set.y)
