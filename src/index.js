@@ -38,7 +38,8 @@ const defaults = {
     outerRadius: 150,
     stroke: 'black',
     fontSize: 20,
-    spacing: 20
+    spacing: 20,
+    labelSpacing: 5
   },
   scatter: {
     labelPosition: 'legend',
@@ -64,8 +65,6 @@ function showDefaults (type) {
 }
 
 function colour (i) {
-  // console.debug('test color generation')
-
   const color = d3.scaleOrdinal(d3.schemeDark2)
 
   if (i) {
@@ -170,9 +169,11 @@ function resize (options) {
   d3.select(id).selectAll('svg')
     .attr('height', height)
     .attr('width', width)
-
 }
 
+function set () {
+
+}
 function setOptions (type, options) {
   if (!options) { options = {} }
   // enables easy use of pre-defined default options by type
@@ -206,118 +207,143 @@ function setOptions (type, options) {
     }
   }
 
+  if (options.svg) {
+    if (!options.width) {
+      Options.width = options.svg.attr("width")
+    }
+    if (!options.height) {
+      Options.height = options.svg.attr("height")
+    }
+  } else {
+    Options.width = defaults.svg.canvasWidth
+    Options.height = defaults.svg.canvasHeight
+  }
+    
+  Options.dataHeight = Options.height - Options.topMargin - Options.bottomMargin
+  Options.dataWidth = Options.width - Options.leftMargin - Options.rightMargin 
+  console.log("extract svg attributes... for height & width")
+  console.log('eg height: ' + Options.height + ' - ' + Options.topMargin + ' - ' + Options.bottomMargin)
+
   // Add additional options for plots:
-  if (options.data) {
+  if (! options.data) {
+    console.log(type + ' output options: ' + JSON.stringify(Options))
+    return Options
+  } else {
+    // add details when dataset is available ... 
     if (!options.headers) {
       Options.headers = Object.keys(options.data[0]).map(a => {
         return { text: a, value: a }
       })
     }
 
-    if (options.svg) {
-      if (!options.width) {
-        Options.width = options.svg.attr("width")
-      }
-      if (!options.height) {
-        Options.height = options.svg.attr("height")
-      }
-      
-      Options.dataHeight = Options.height - Options.topMargin - Options.bottomMargin
-      Options.dataWidth = Options.width - Options.leftMargin - Options.rightMargin 
-      console.log("extract svg attributes... for height & width")
-      console.log('eg height: ' + Options.height + ' - ' + Options.topMargin + ' - ' + Options.bottomMargin)
-    }
-
-    if (!options.valueCol || !options.labelCol) {
+    if (!options.yCol || !options.xCol) {
       console.log("Confirm key index for value column...")
-      var valueCol
-      var labelCol
+      var yCol
+      var xCol
       var index = 0
       for (var o = 0; o < Options.headers.length; o++) {
-        valueCol = Options.headers[o].value
-        console.log(valueCol + ' ? ')
-        var cType = options.data[0][valueCol].constructor
+        yCol = Options.headers[o].value
+        console.log(yCol + ' ? ')
+        var cType = options.data[0][yCol].constructor
         if (cType === Number && !index) {
           index = o
           o = Options.headers.length
-        } else if (!labelCol) {
-          labelCol = valueCol
+        } else if (!xCol) {
+          xCol = yCol
         } else if (cType === String) {
-          labelCol = valueCol
+          xCol = yCol
         }
       }
 
-      if (!options.valueCol) { Options.valueCol = valueCol }
-      if (!options.labelCol) { Options.labelCol = labelCol }
-    }
+      if (!options.yCol) { Options.yCol = yCol }
+      if (!options.xCol) { Options.xCol = xCol }
 
+      if (Options.orientation === 'horizontal' && type === 'bar') {
+        // reverse default expected x(label) & y(val) columns... if not manually specified
+        if (!options.yCol) { Options.yCol = xCol }
+        if (!options.xCol) { Options.xCol = yCol }          
+      }
+    }
     if (!options.color) {
       Options.color = d3.scaleOrdinal(d3.schemeDark2)
     }
 
-    var max = 0
-    console.log(JSON.stringify(options.data))
-    options.data.map((a) => {
-      var val = parseInt(a[Options.valueCol])
-      if (val > max) { max = val }
-    })
-    Options.maxValue = max
-    Options.records = options.data.length
-  }
-
-
-  if (type === 'bar') {
-    var xPadding = 0
-    var yPadding = 0
-    var span
-    var crossSpan
-    if (Options.orientation === 'horizontal') {
-      xPadding = Options.maxValue.toString().length * Options.fontSize / 2
-      span = Options.dataWidth + xPadding
-      crossSpan = Options.dataHeight
-      console.log('set span as ' + Options.width + ' - ' + Options.leftMargin + ' - ' + Options.rightMargin + ' - ' + xPadding)
-    } else {
-      yPadding = Options.fontSize
-      span = Options.dataHeight + yPadding
-      crossSpan = Options.dataWidth
-      console.log('set span as ' + Options.height + ' - ' + Options.topMargin + ' - ' + Options.bottomMargin + ' - ' + yPadding)
-    }
-    Options.span = span
-    Options.crossSpan = crossSpan
-    
-    if (!options.scale) {
-      // default if not manually specified (Note: options is input.. Options includes defaults)
-      Options.scale = Options.span / Options.maxValue
-      console.log('auto set scale to ' + Options.scale + ' (based on max value of ' + Options.maxValue + ' and an effective canvas size of ' + span)
-    }
-    if (!options.thickness) {
-      Options.thickness = ((crossSpan - 2*Options.spacing) / Options.records) - Options.spacing
-      console.log('auto set bar thickness to ' + Options.thickness + ' (based on ' + Options.records + ' records (spaced at ' + Options.spacing + ') spanning an effective canvas base of ' + crossSpan )
-    }
-  } else if (type === 'scatter') {
-    Options.xCol = Options.labelCol
-    Options.yCol = Options.valueCol
-
     var maxX = 0
+    var maxY = 0
+    var maxXLength = 0
+    var maxYLength = 0
     console.log(JSON.stringify(options.data))
     options.data.map((a) => {
-      var val = parseInt(a[Options.xCol])
+      var valX = parseFloat(a[Options.xCol])
+      if (valX > maxX) { maxX = valX }
 
-      if (val > maxX) {
-        maxX = val
-      }
+      var valY = parseFloat(a[Options.yCol])
+      if (valY > maxY) { maxY = valY }
+
+      var slenX = a[Options.xCol].toString().length
+      if (slenX > maxXLength) { maxXLength = slenX }
+
+      var slenY = a[Options.yCol].toString().length
+      if (slenY > maxYLength) { maxYLength = slenY }
     })
     Options.maxX = maxX
-    Options.maxY = max
+    Options.maxY = maxY
+    Options.maxXLength = maxXLength
+    Options.maxYLength = maxYLength
 
-    console.log('set scale height to max:' + Options.dataHeight + ' / ' + Options.maxY)
-    console.log('set scale width to max:' + Options.dataWidth + ' / ' + Options.maxX)
-    Options.scaleX = Options.dataWidth / Options.maxX
-    Options.scaleY = Options.dataHeight / Options.maxY
+    Options.records = options.data.length
 
+    if (type === 'bar') {
+      var xPadding = 0
+      var yPadding = 0
+
+      var span
+      var crossSpan
+      if (Options.orientation === 'horizontal') {
+        Options.labelCol = Options.yCol
+        Options.valueCol = Options.xCol
+        Options.maxValue = Options.maxX
+        Options.maxLabelLength = Options.maxY
+
+        xPadding = Options.maxYLength * Options.fontSize / 2 + Options.labelSpacing*2
+        Options.xPadding = xPadding
+        span = Options.dataWidth - xPadding
+        crossSpan = Options.dataHeight
+        console.log('set axis span as ' + Options.width + ' - ' + Options.leftMargin + ' - ' + Options.rightMargin + ' - ' + xPadding)
+      } else {
+        Options.labelCol = Options.xCol
+        Options.valueCol = Options.yCol
+        Options.maxValue = Options.maxY
+        Options.maxLabelLength = Options.maxX
+
+        yPadding = Options.fontSize + Options.labelSpacing*2
+        Options.yPadding = yPadding
+        span = Options.dataHeight - yPadding
+        crossSpan = Options.dataWidth
+        console.log('set axis span as ' + Options.height + ' - ' + Options.topMargin + ' - ' + Options.bottomMargin + ' - ' + yPadding)
+      }
+      Options.span = span
+      Options.crossSpan = crossSpan
+      
+      if (!options.scale) {
+        // default if not manually specified (Note: options is input.. Options includes defaults)
+        Options.scale = Options.span / Options.maxValue
+        console.log('auto set scale to ' + Options.scale + ' (based on max value of ' + Options.maxValue + ' and an effective canvas size of ' + span)
+      }
+      if (!options.thickness) {
+        Options.thickness = ((crossSpan - 2*Options.spacing) / Options.records) - Options.spacing
+        console.log('auto set bar thickness to ' + Options.thickness + ' (based on ' + Options.records + ' records (spaced at ' + Options.spacing + ') spanning an effective canvas base of ' + crossSpan )
+      }
+    } else if (type === 'scatter') {
+      console.log('set scale height to max:' + Options.dataHeight + ' / ' + Options.maxY)
+      console.log('set scale width to max:' + Options.dataWidth + ' / ' + Options.maxX)
+      Options.scaleX = Options.dataWidth / Options.maxX
+      Options.scaleY = Options.dataHeight / Options.maxY
+    }
+    
+    console.log(type + ' output options using dataset: ' + JSON.stringify(Options))
+    return Options
   }
-  console.log(type + ' output options: ' + JSON.stringify(Options))
-  return Options
 }
 
 function addCircle (options) {
@@ -348,4 +374,4 @@ function addRectangle(options) {
           .attr('fill', set.color || 'green');
 }
 
-export default {colour, showDefaults, initSvg, embedData, resize, setOptions, addCircle, addRectangle}
+export default { colour, showDefaults, initSvg, embedData, resize, setOptions, addCircle, addRectangle }
