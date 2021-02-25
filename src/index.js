@@ -334,6 +334,11 @@ function setOptions (type, options) {
         Options.thickness = ((crossSpan - 2*Options.spacing) / Options.records) - Options.spacing
         console.log('auto set bar thickness to ' + Options.thickness + ' (based on ' + Options.records + ' records (spaced at ' + Options.spacing + ') spanning an effective canvas base of ' + crossSpan )
       }
+    } else if (type === 'pie') {
+      Options.labelCol = Options.xCol
+      Options.valueCol = Options.yCol
+      Options.maxValue = Options.maxY
+      Options.maxLabelLength = Options.maxX
     } else if (type === 'scatter') {
       console.log('set scale height to max:' + Options.dataHeight + ' / ' + Options.maxY)
       console.log('set scale width to max:' + Options.dataWidth + ' / ' + Options.maxX)

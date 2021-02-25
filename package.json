@@ -1,6 +1,6 @@
 {
   "name": "svg-d3",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Baseline svg initialization package (use by other custom d3 visualization packages)",
   "author": "Ran Guin <ran.guin@gmail.com>",
   "keywords": [
