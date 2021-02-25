@@ -102,6 +102,55 @@ function initSvg (svgOptions) {
       .attr('width', w)
 }
 
+function embedData (data, element) {
+  var table = document.createElement("table");
+  var record = data[0]
+
+  if (record.constructor === Object) {
+    console.log('converting hashes to table')
+    var keys = Object.keys(data)
+    for (var i = 0; i < data.length; i++) {
+      var row = table.insertRow(-1);
+      var cells = keys.map(a => data[i][a] || '');
+      for (var j = 0; j < cells.length; j++) {
+          var cell = row.insertCell(-1);
+          cell.innerHTML = cells[j];
+      }
+    }  
+  } else if (record.constructor === Array) {
+    console.log('converting arrays to table')
+    for (var i = 0; i < data.length; i++) {
+      var row = table.insertRow(-1);
+      var cells = data[i];
+      for (var j = 0; j < cells.length; j++) {
+          var cell = row.insertCell(-1);
+          cell.innerHTML = cells[j];
+      }
+    }  
+  } else if (record.constructor === String) {
+    console.log('converting strings to table')
+    var tab = /\t/
+    var sep = /,\s*/
+    if (record.match(tab)) {
+      sep = tab
+    }
+    for (var i = 0; i < data.length; i++) {
+        var row = table.insertRow(-1);
+        var cells = rows[i].split(sep);
+        for (var j = 0; j < cells.length; j++) {
+            var cell = row.insertCell(-1);
+            cell.innerHTML = cells[j];
+        }
+    }
+  }
+  var embedElement = document.getElementById(element);
+  if (embedElement) {
+    embedElement.innerHTML = "";
+    embedElement.appendChild(table);
+  }
+  console.log('embed table data into element: ' + element)
+}
+
 function resize (options) {
   var id = options.id
   var height = options.height
@@ -291,4 +340,4 @@ function addRectangle(options) {
           .attr('fill', set.color || 'green');
 }
 
-module.exports = {colour, showDefaults, initSvg, resize, setOptions, addCircle, addRectangle}
+module.exports = {colour, showDefaults, initSvg, embedData, resize, setOptions, addCircle, addRectangle}
