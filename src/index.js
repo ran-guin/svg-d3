@@ -105,11 +105,18 @@ function initSvg (svgOptions) {
 function embedData (data, element) {
   var table = document.createElement("table");
   var record = data[0]
+  var keys = Object.keys(data[0])
 
   console.log(record.constructor + ' record type detected for ' + JSON.stringify(data))
   if (record.constructor === Object) {
     console.log('converting hashes to table')
-    var keys = Object.keys(data)
+
+    var header = table.insertRow(-1);
+    for (var h = 0; h < keys.length; h++) {
+        var cell = header.insertCell(-1);
+        cell.innerHTML = '<b>' + keys[h] + '</b>';
+    }
+
     for (var i = 0; i < data.length; i++) {
       var row = table.insertRow(-1);
       var cells = keys.map(a => data[i][a] || '');
