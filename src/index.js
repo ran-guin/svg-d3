@@ -80,6 +80,18 @@ function colour (i) {
   }
 }
 
+function contrastWith (colour, max) {
+  var col = d3.color(colour)
+  
+  var threshold = max || 126
+
+  if ((col.r*0.299 + col.g*0.587 + col.b*0.114) > threshold) {
+    return 'black'
+  } else {
+    return 'white'
+  }
+}
+
 function initSvg (svgOptions) {
   const options = this.setOptions('svg', svgOptions)
 
@@ -340,10 +352,11 @@ function setOptions (type, options) {
       Options.maxValue = Options.maxY
       Options.maxLabelLength = Options.maxX
     } else if (type === 'scatter') {
-      console.log('set scale height to max:' + Options.dataHeight + ' / ' + Options.maxY)
-      console.log('set scale width to max:' + Options.dataWidth + ' / ' + Options.maxX)
-      Options.scaleX = Options.dataWidth / Options.maxX
-      Options.scaleY = Options.dataHeight / Options.maxY
+      if (!Options.ptSize) { Options.ptSize = 5 }
+      Options.xPadding = Options.ptSize / 2
+      Options.yPadding = Options.ptSize / 2
+      Options.scaleX = (Options.dataWidth - Options.xPadding) / Options.maxX
+      Options.scaleY = (Options.dataHeight - Options.yPadding) / Options.maxY
     }
     
     console.log(type + ' output options using dataset: ' + JSON.stringify(Options))
@@ -379,4 +392,4 @@ function addRectangle(options) {
           .attr('fill', set.color || 'green');
 }
 
-export default { colour, showDefaults, initSvg, embedData, resize, setOptions, addCircle, addRectangle }
+export default { colour, contrastWith, showDefaults, initSvg, embedData, resize, setOptions, addCircle, addRectangle }
