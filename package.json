@@ -1,6 +1,6 @@
 {
   "name": "svg-d3",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Baseline svg initialization package (use by other custom d3 visualization packages)",
   "author": "Ran Guin <ran.guin@gmail.com>",
   "keywords": [
@@ -19,7 +19,6 @@
     "url": "https://github.com/ran-guin/svg-d3/issues"
   },
   "homepage": "https://github.com/ran-guin/svg-d3#readme",
-
   "main": "./dist/index.js",
   "type": "module",
   "scripts": {
