@@ -98,7 +98,7 @@ function initSvg (svgOptions) {
   var id = options.canvasId
   console.log('initialize d3 canvas : ' + id)
 
-  if (svgOptions.clear) {
+  if (options.clear) {
     console.log('clear existing svg first...')
     d3.select('#' + id).selectAll('svg').remove()
   }
