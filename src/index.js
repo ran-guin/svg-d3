@@ -10,7 +10,7 @@ const defaults = {
     x: 100,
     y: 100,
     fontSize: 20,
-    color: 'black'
+    color: 'black',
     anchor: 'left'
   },
   title: {
