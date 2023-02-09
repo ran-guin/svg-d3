@@ -23,12 +23,12 @@ const defaults = {
     y: 20,
     radius: 30
   },
-  rectangle: [
+  rectangle: {
     x: 100,
     y: 100,
     height: 50,
     width: 50
-  ],
+  },
   bar: {
     xOffset: 10,
     yOffset: 5,
