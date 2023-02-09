@@ -6,11 +6,29 @@ const defaults = {
     canvasHeight: '600',
     canvasWidth: '800'
   },
+  text: {
+    x: 100,
+    y: 100,
+    fontSize: 20,
+    color: 'black'
+    anchor: 'left'
+  },
+  title: {
+    fontSize: 20,
+    color: 'blue',
+    anchor: 'middle'
+  },
   circle: {
     x: 20,
     y: 20,
     radius: 30
   },
+  rectangle: [
+    x: 100,
+    y: 100,
+    height: 50,
+    width: 50
+  ],
   bar: {
     xOffset: 10,
     yOffset: 5,
@@ -50,9 +68,6 @@ const defaults = {
     leftMargin: 50,
     rightMargin: 10,
     padding: 15
-  },
-  text: {
-    fontSize: 20
   }
 }
 
@@ -93,6 +108,10 @@ function contrastWith (colour, max) {
 }
 
 function initSvg (svgOptions) {
+  if (!options) {
+    options = {};
+  } // enables easy use of pre-defined default options by type
+
   const options = this.setOptions('svg', svgOptions)
 
   var id = options.canvasId
@@ -235,6 +254,19 @@ function setOptions (type, options) {
   Options.dataWidth = Options.width - Options.leftMargin - Options.rightMargin 
   console.log("extract svg attributes... for height & width")
   console.log('eg height: ' + Options.height + ' - ' + Options.topMargin + ' - ' + Options.bottomMargin)
+
+  // Customize non-data default options 
+  if (type === 'title') {
+    var canvasWidth = options.svg.attr('width')
+    
+    if (!options.x) { 
+      Options.x = canvasWidth / 2;
+      Options.anchor = 'middle';
+    }
+    if (!options.y) {
+      Options.y = Options.fontSize
+    }    
+  }
 
   // Add additional options for plots:
   if (! options.data) {
@@ -387,9 +419,63 @@ function addRectangle(options) {
   return svg.append('rect')
           .attr('x', set.x)
           .attr('y', set.y)
-          .attr('height', set.radius)
-          .attr('width', set.radius)
+          .attr('height', set.height)
+          .attr('width', set.width)
           .attr('fill', set.color || 'green');
 }
 
-export default { colour, contrastWith, showDefaults, initSvg, embedData, resize, setOptions, addCircle, addRectangle }
+
+function addText(text, options) {
+  if (!options) { options = {} }
+  var svg = options.svg || this.initSvg(options);
+  const set = this.setOptions('text', options);
+  
+  console.log('add text: ' + JSON.stringify(set));
+
+  return svg.append('text')
+            .attr("x", set.x)
+            .attr("y", set.y)
+            .attr("font-size", set.fontSize)
+            .attr("fill", set.color)
+            .style('text-anchor', set.anchor)
+            .text(text);
+}
+
+function addTitle(text, options) {
+  if (!options) { options = {} }
+  var svg = options.svg || this.initSvg(options);
+  const set = this.setOptions('title', options);
+  
+  console.log('add title: ' + JSON.stringify(set));
+
+  var block = svg.append('text')
+          .style('text-anchor', set.anchor)
+          .attr("x", set.x)
+          .attr("y", set.y)
+          .attr("font-size", set.fontSize)
+          .attr("fill", set.color)
+          .text(text);
+
+          var block = svg.append('text')
+          .style('text-anchor', set.anchor)
+          .attr("x", set.x)
+          .attr("y", set.y)
+          .attr("font-size", set.fontSize)
+          .attr("fill", set.color)
+          .text(text);
+
+  if (set.border) {
+    var pad = set.padBorder || 0;
+    var borderOptions = setOptions('rectangle', options);
+    borderOptions.width = options.svg.attr('width') - pad*2 - set.border;
+    console.log('set w' + JSON.stringify(borderOptions));
+    borderOptions.height = svg.attr('height') - pad*2 - set.fontSize - 2*set.border - set.padTitle;
+    borderOptions.x = pad + set.border/2;
+    borderOptions.y = pad + set.fontSize + 2*set.border + set.padTitle;
+    borderOptions.color = set.borderColor || black;
+
+    addRectangle(borderOptions)
+  }
+}
+
+export default { colour, contrastWith, showDefaults, initSvg, embedData, resize, setOptions, addCircle, addRectangle, addText, addTitle }
